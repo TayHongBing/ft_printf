@@ -27,6 +27,25 @@ t_print	*ft_initialise_tab(t_print *tab)
 	return (tab);
 }
 
+int	ft_check_format(t_print	*tab, const char format, int i)
+{
+	if (format == 'c')
+		tab->total += ft_printchar(va_arg(args, int));
+	else if (format == 's')
+		tab->total += ft_printstr(va_arg(args, char *));
+	else if (format == 'p')
+		tab->total += ft_printptr(va_arg(args, unsigned long));
+	else if (format == 'd' || format == 'i')
+		tab->total += ft_printnbr(va_arg(args, int));
+	else if (format == 'u')
+		tab->total += ft_printunsigned(va_arg(args, unsigned int));
+	else if (format == 'x' || format == 'X')
+		tab->total += ft_printhex(va_arg(args, unsigned int), format);
+	else if (format == '%')
+		tab->total += ft_printpercent();
+	return (tab->total);
+}
+
 int	ft_printf(const char *format, ...)
 {
 	t_print	*tab;
@@ -43,7 +62,12 @@ int	ft_printf(const char *format, ...)
 	while(format[i++])
 	{
 		if(format[i] == '%')
-
+			i = ft_check_format(tab, format, i + 1);
+		else
+			res += write(1, &format[i], 1);
 	}
-
+	va_end(tab->args);
+	res += tab->total;
+	free (tab);
+	return (res);
 }

@@ -29,7 +29,7 @@ typedef	struct s_print
 	int		is_zero;	//is number zero
 	int		ptage;		//%
 	int		sp;			//space flag
-}
+} t_print;
 
 
 #endif
