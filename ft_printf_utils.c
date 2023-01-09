@@ -6,7 +6,7 @@
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 17:49:02 by thong-bi          #+#    #+#             */
-/*   Updated: 2022/12/29 17:49:02 by thong-bi         ###   ########.fr       */
+/*   Updated: 2023/01/09 15:24:44 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	ft_printnbr(int n)
 	return (len);
 }
 
-int	ft_printpercent(void);
+int	ft_printpercent(void)
 {
 	write(1, "%", 1);
 	return (1);

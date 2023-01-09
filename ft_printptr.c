@@ -6,7 +6,7 @@
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 17:18:52 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/03 17:18:52 by thong-bi         ###   ########.fr       */
+/*   Updated: 2023/01/09 15:25:28 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	ft_printptr(unsigned long ptr)
 	int	len;
 
 	len = 0;
-	len += write(1, "0x", 2)
+	len += write(1, "0x", 2);
 	if (ptr == 0)
 		len += write(1, "0", 1);
 	else
