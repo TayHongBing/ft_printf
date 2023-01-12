@@ -13,66 +13,82 @@
 #include "ft_printf.h"
 #include <stdlib.h>
 
-/*t_print	*ft_initialise_tab(t_print *tab)
+t_print	*ft_initialise_tab(t_print tab)
 {
-	tab->wid = 0;
-	tab->prec = 0;
-	tab->zero = 0;
-	tab->pnt = 0;
-	tab->sign = 0;
-	tab->total = 0;
-	tab->is_zero = 0;
-	tab->dash = 0;
-	tab->ptage = 0;
-	tab->sp = 0;
+	tab.wid = 0;
+	tab.prec = -1;
+	tab.zero = 0;
+	tab.pnt = 0;
+	tab.dash = 0;
 	return (tab);
 }
-*/
-int	ft_check_format(va_list args, const char format)
-{
-	int total;
 
-	total = 0;
-	if (format == 'c')
-		total += ft_printchar(va_arg(args, int));
-	else if (format == 's')
-		total += ft_printstr(va_arg(args, char *));
-	else if (format == 'p')
-		total += ft_printptr(va_arg(args, unsigned long));
-	else if (format == 'd' || format == 'i')
-		total += ft_printnbr(va_arg(args, int));
-	else if (format == 'u')
-		total += ft_printunsigned(va_arg(args, unsigned int));
-	else if (format == 'x' || format == 'X')
-		total += ft_printhex(va_arg(args, unsigned int), format);
-	else if (format == '%')
-		total += ft_printpercent();
-	return (total);
+t_print	ft_check_wild(t_print tab, va_list args)
+{
+	if (tab.pnt == 1)
+		tab.prec = va_arg(args, int);
+	else if (tab.wid < 1)
+	{
+		tab.wid = va_arg(args, int);
+		if (tab.wid < 0)
+		{
+			tab.wid *= -1;
+			tab.dash = 1;
+		}
+	}
+	return (tab);
+}
+
+t_print	ft_first_check(const char *format, t_print tab, va_list args)
+{
+	int	i;
+
+	i = 0;
+	while (format[i] && ft_first_flags(format[i]))
+	{
+		if (format[i] == '-')
+			tab.dash = 1;
+		else if (format[i] == '0' && tab.wid < 1 && tab.pnt == 0)
+			tab.zero = 1;
+		else if ((format[i] >= '0' || format[i] <= '9') && tab.pnt == 0)
+			tab.wid = tab.wid * 10 + format[i] - 48;
+		else if (format[i] == '.')
+		{
+			tab.pnt = 1;
+			tab.prec = 0;
+		}
+		else if ((format[i] >= '0' || format[i] <= '9') && tab.pnt == 1)
+			tab.prec = tab.prec * 10 + format[i] - 48;
+		else if (format[i] == '*')
+			tab = ft_check_wild(tab, args);
+		i++;
+	}
+	return (tab);
 }
 
 int	ft_printf(const char *format, ...)
 {
-	//t_print	*tab;
+	t_print	tab;
 	va_list	args;
 	int		i;
 	int		res;
 
-	//tab = (t_print*)malloc(sizeof(t_print));
-	//if(!tab)
-	//	return (0);
-	//ft_initialise_tab(tab);
 	va_start(args, format);
 	i = 0;
 	res = 0;
 	while(format[i++])
 	{
-		if(format[i] == '%')
-			res += ft_check_format(args, format[i + 1]);
-		else	
+		if(format[i] == '%' && format[i + 1] != '\0')
+		{
+			tab = ft_initialise_tab(tab);
+			tab = ft_first_check(&format[++i], tab, args);
+			while (ft_first_flags(str[i]))
+				i++;
+			res += ft_print_all(format[i], tab, args);
+		}
+		else
 			res += write(1, &format[i], 1);
 	}
 	va_end(args);
-	//res += tab->total;
-	//free (tab);
 	return (res);
 }
