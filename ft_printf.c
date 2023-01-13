@@ -50,14 +50,14 @@ t_print	ft_first_check(const char *format, t_print tab, va_list args)
 			tab.dash = 1;
 		else if (format[i] == '0' && tab.wid < 1 && tab.pnt == 0)
 			tab.zero = 1;
-		else if ((format[i] >= '0' || format[i] <= '9') && tab.pnt == 0)
+		else if ((format[i] >= '0' && format[i] <= '9') && tab.pnt == 0)
 			tab.wid = tab.wid * 10 + format[i] - 48;
 		else if (format[i] == '.')
 		{
 			tab.pnt = 1;
 			tab.prec = 0;
 		}
-		else if ((format[i] >= '0' || format[i] <= '9') && tab.pnt == 1)
+		else if ((format[i] >= '0' && format[i] <= '9') && tab.pnt == 1)
 			tab.prec = tab.prec * 10 + format[i] - 48;
 		else if (format[i] == '*')
 			tab = ft_check_wild(tab, args);

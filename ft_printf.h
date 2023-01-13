@@ -26,6 +26,9 @@ typedef	struct s_print
 	int		dash;		//-
 } t_print;
 
+# define HEXUP	"0123456789ABCDEF"
+# define HEXLOW	"0123456789abcdef"
+
 int	ft_printchar(int c);
 int	ft_printstr(char *str);
 int	ft_printnbr(int n);
