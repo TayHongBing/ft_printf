@@ -14,5 +14,21 @@
 
 int	ft_print_char(t_print tab, va_list args)
 {
-
+	if (tab.dash == 1 && tab.wid > 1)
+	{
+		ft_putchar_fd(va_arg(args, int), 1);
+		ft_print_width(' ', tab.wid - 1);
+		return (tab.wid);
+	}
+	else if (tab.dash == 0 && tab.wid > 1)
+	{
+		if (tab.zero == 1)
+			ft_print_width('0', tab.wid - 1);
+		else
+			ft_print_width(' ', tab.wid - 1);
+	}
+	ft_putchar_fd(va_arg(args, int), 1);
+	if (tab.wid > 1)
+		return (tab.wid);
+	return (1);
 }
