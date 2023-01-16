@@ -6,57 +6,82 @@
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 22:40:46 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/05 22:40:46 by thong-bi         ###   ########.fr       */
+/*   Updated: 2023/01/16 15:57:06 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_hex_len(unsigned int num)
+int	print_prec_hex(t_print tab, int len)
 {
-	int	len;
-
-	len = 0;
-	while (num != 0)
+	int	i;
+	
+	if (tab.prec)
 	{
-		len++;
-		num /= 16;
+		i = -1;
+		while (++i < tab.prec - len)
+			ft_putchar_fd('0', 1);
+		return (i);
 	}
-	return (len);
+	return (0);
 }
 
-void	ft_put_hex(unsigned int num, const char format)
+int	print_width_hex(t_print tab, int len)
 {
-	if (num >= 16)
-	{
-		ft_put_hex(num / 16, format);
-		ft_put_hex(num % 16, format);
-	}
+	int	count;
+
+	count = 0;
+	if (tab.zero && !tab.dash && tab.prec < 0)
+		count = ft_print_width('0', tab.wid - len);
+	else if (tab.prec >= len)
+		count = ft_print_width(' ', tab.wid - tab.prec);
 	else
-	{
-		if (num <= 9)
-			ft_printchar(num + '0');
-		else
-		{
-			if (format == 'x')
-				ft_printchar(num - 10 + 'a');
-			if (format == 'X')
-				ft_printchar(num - 10 + 'A');
-		}
-	}
+		count = ft_print_width(' ', tab.wid - len);
+	return (count);
 }
 
-int	ft_printhex(unsigned int num, const char format)
+int	check_dash_hex(t_print tab, int len, char *str)
 {
-	int	len;
-
-	len = 0;
-	if (num == 0)
-		len += write(1, "0", 1);
-	else
+	int	count;
+	
+	count = 0;
+	if (tab.dash)
 	{
-		ft_put_hex(num, format);
-		len = ft_hex_len(num);
+		count += print_prec_hex(tab, len);
+		ft_putstr_fd(str, 1);
+		count += len;
+		count += print_width_hex(tab, len);
 	}
-	return (len);
+	else if (!tab.dash)
+	{
+		count += print_width_hex(tab, len);
+		count += print_prec_hex(tab, len);
+		ft_putstr_fd(str, 1);
+		count += len;
+	}
+	return (count);
+}
+
+int	ft_printhex(char *array, t_print tab, va_list args)
+{
+	char	*str;
+	int		len;
+	int		res;
+	unsigned int	num;
+
+	res = 0;
+	num = va_arg(args, unsigned int);
+	if (!num)
+		str = ft_strdup("0");
+	else
+		str = ft_convert_ptr(array, num);
+	len = ft_strlen(str);
+	if (tab.prec == 0 && str[0] == '0')
+	{
+		res += ft_print_width(' ', tab.wid);
+		return (res);
+	}
+	res += check_dash_hex(tab, len, str);
+	free(str);
+	return (res);
 }

@@ -6,12 +6,61 @@
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 22:15:33 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/09 15:38:26 by thong-bi         ###   ########.fr       */
+/*   Updated: 2023/01/16 16:24:26 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdlib.h>
+
+int	print_width_unsign(int len, t_print tab)
+{
+	int	count;
+
+	count = 0;
+	if (tab.zero && !tab.dash && tab.prec <= 0)
+		count += ft_print_width('0', tab.wid - len);
+	else if (tab.prec >= len)
+		count += ft_print_width(' ', tab.wid - tab.prec);
+	else
+		count += ft_print_width(' ', tab.wid - len);
+	return (count);
+}
+
+int	print_prec_unsign(int len, t_print tab)
+{
+	int	i;
+
+	if (tab.prec)
+	{
+		i = -1;
+		while (++i < tab.prec - len)
+			ft_putchar_fd('0', 1);
+		return (i);
+	}
+	return (0);
+}
+
+int	check_dash_unsign(char *str, int len, t_print tab)
+{
+	int	count;
+
+	count = 0;
+	if (tab.dash)
+	{
+		count += print_prec_unsign(len, tab);
+		ft_putstr_fd(str, 1);
+		count += len;
+		count += print_width_unsign(len, tab);
+	}
+	else if (!tab.dash)
+	{
+		count += print_width_unsign(len, tab);
+		count += print_prec_unsign(len, tab);
+		ft_putstr_fd(str, 1);
+		count += len;
+	}
+	return (count);
+}
 
 int	ft_num_len(unsigned int num)
 {
@@ -26,7 +75,7 @@ int	ft_num_len(unsigned int num)
 	return (len);
 }
 
-char	*ft_itoa(unsigned int num)
+char	*ft_utoa(unsigned int num)
 {
 	char	*n;
 	int		len;
@@ -44,19 +93,21 @@ char	*ft_itoa(unsigned int num)
 	return (n);
 }
 
-int	ft_printunsigned(unsigned int num)
+int	ft_printunsigned(t_print tab, va_list args)
 {
+	char	*str;
 	int		len;
-	char	*n;
+	int		res;
 
-	len = 0;
-	if (num == 0)
-		len += write(1, "0", 1);
-	else
+	str = ft_utoa(va_arg(args, unsigned int));
+	len = ft_strlen(str);
+	res = 0;
+	if (tab.prec == 0 && str[0] == '0')
 	{
-		n = ft_itoa(num);
-		len += ft_printstr(n);
-		free (n);
+		res += ft_print_width(' ', tab.wid);
+		return (res);
 	}
-	return (len);
+	res += check_dash_unsign(str, len, tab);
+	free(str);
+	return (res);
 }

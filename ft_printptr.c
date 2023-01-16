@@ -6,54 +6,87 @@
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 17:18:52 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/09 15:25:28 by thong-bi         ###   ########.fr       */
+/*   Updated: 2023/01/16 17:05:25 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "libft.h"
 
-int	ft_ptr_len(unsigned long num)
+int	ft_num_len(unsigned long long num, int len)
 {
-	int	len;
+	int	count;
 
-	len = 0;
-	while (num != 0)
+	count = 0;
+	while (num > 0)
 	{
-		len++;
-		num /= 16;
+		num /= len;
+		count++;
 	}
-	return (len);
+	return (count);
 }
 
-void	ft_put_ptr(unsigned long num)
+char	*ft_convert_ptr(char *array, unsigned long long num)
 {
-	if(num >= 16)
+	int		len_hex;
+	int		len_num;
+	char	*str;
+
+	len_hex = ft_strlen(array);
+	len_num = ft_num_len(num);
+	str = (char *)malloc(sizeof(char) * (len_num + 1));
+	if (!str)
+		return (NULL);
+	str[len_num] = '\0';
+	while (--len_num)
 	{
-		ft_put_ptr(num / 16);
-		ft_put_ptr(num % 16);
+		str[len_num] = array[num % len_hex];
+		num /= len_hex;
 	}
-	else
+	if (len_num == 0)
+		str[len_num] = array[num % len_hex];
+	return (str);
+}
+
+int	check_dash_ptr(t_print tab, int len, char *str)
+{
+	int	count;
+
+	count = 0;
+	if (tab.dash)
 	{
-		if (num <= 9)
-			ft_printchar(num + '0');
+		count += ft_putstr_fd("0x", 1);
+		count += ft_putstr_fd(str, 1);
+		count += ft_print_width(' ', tab.wid - (len + 2));
+	}
+	else if(!tab.dash)
+	{
+		count += ft_print_width(' ', tab.wid - (len + 2));
+		count += ft_putstr_fd("0x", 1);
+		count += ft_putstr_fd(str, 1);
+	}
+	return (count);
+}
+
+int	ft_printptr(t_print tab, va_list args)
+{
+	char				*str;
+	int					len;
+	int					res;
+	unsigned long long	num;
+
+	num = va_arg(args, unsigned long long);
+	res = 0;
+	if (!num)
+	{
+		if (!tab.prec)
+			str = ft_strdup("");
 		else
-			ft_printchar(num - 10 + 'a');
+			str = ft_strdup("0");
 	}
-}
-
-int	ft_printptr(unsigned long ptr)
-{
-	int	len;
-
-	len = 0;
-	len += write(1, "0x", 2);
-	if (ptr == 0)
-		len += write(1, "0", 1);
 	else
-	{
-		ft_put_ptr(ptr);
-		len += ft_ptr_len(ptr);
-	}
-	return (len);
+		str = ft_convert_ptr("0123456789abcdef", num);
+	len = ft_strlen(str);
+	res += check_dash_ptr(tab, len, str);
+	free(str);
+	return (res);
 }
