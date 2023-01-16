@@ -6,16 +6,16 @@
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 22:40:46 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/16 15:57:06 by thong-bi         ###   ########.fr       */
+/*   Updated: 2023/01/16 18:10:28 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	print_prec_hex(t_print tab, int len)
+int	print_prec_hex(t_lst tab, int len)
 {
 	int	i;
-	
+
 	if (tab.prec)
 	{
 		i = -1;
@@ -26,7 +26,7 @@ int	print_prec_hex(t_print tab, int len)
 	return (0);
 }
 
-int	print_width_hex(t_print tab, int len)
+int	print_width_hex(t_lst tab, int len)
 {
 	int	count;
 
@@ -40,10 +40,10 @@ int	print_width_hex(t_print tab, int len)
 	return (count);
 }
 
-int	check_dash_hex(t_print tab, int len, char *str)
+int	check_dash_hex(t_lst tab, int len, char *str)
 {
 	int	count;
-	
+
 	count = 0;
 	if (tab.dash)
 	{
@@ -62,11 +62,11 @@ int	check_dash_hex(t_print tab, int len, char *str)
 	return (count);
 }
 
-int	ft_printhex(char *array, t_print tab, va_list args)
+int	ft_printhex(char *array, t_lst tab, va_list args)
 {
-	char	*str;
-	int		len;
-	int		res;
+	char			*str;
+	int				len;
+	int				res;
 	unsigned int	num;
 
 	res = 0;

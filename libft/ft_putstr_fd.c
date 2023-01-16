@@ -6,20 +6,24 @@
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 20:48:31 by thong-bi          #+#    #+#             */
-/*   Updated: 2022/12/14 15:40:14 by thong-bi         ###   ########.fr       */
+/*   Updated: 2023/01/16 17:21:34 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+int	ft_putstr_fd(char *s, int fd)
 {
+	int	i;
+
+	i = 0;
 	if (s != NULL)
 	{
-		while (*s)
+		while (s[i])
 		{
-			write(fd, s, 1);
-			s++;
+			ft_putchar_fd(s[i], fd);
+			i++;
 		}
 	}
+	return (i);
 }

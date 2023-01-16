@@ -1,34 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printpercent.c                                  :+:      :+:    :+:   */
+/*   ft_utoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/14 17:54:33 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/16 18:11:39 by thong-bi         ###   ########.fr       */
+/*   Created: 2023/01/16 17:41:40 by thong-bi          #+#    #+#             */
+/*   Updated: 2023/01/16 17:42:01 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-int	ft_printpercent(t_lst tab)
+int	num_len(unsigned int num)
 {
-	int	res;
+	int	len;
 
-	res = 0;
-	if (tab.dash == 1)
+	len = 0;
+	while (num != 0)
 	{
-		ft_putchar_fd('%', 1);
-		res += ft_print_width(' ', tab.wid - 1);
+		len++;
+		len /= 10;
 	}
-	else if (tab.dash == 0)
+	return (len);
+}
+
+char	*ft_utoa(unsigned int num)
+{
+	char	*n;
+	int		len;
+
+	len = num_len(num);
+	n = (char *)malloc(sizeof(char) * (len + 1));
+	if (!num)
+		return (NULL);
+	n[len] = '\0';
+	while (len-- > 0)
 	{
-		if (tab.zero == 1)
-			res += ft_print_width('0', tab.wid - 1);
-		else
-			res += ft_print_width(' ', tab.wid - 1);
-		ft_putchar_fd('%', 1);
+		n[len - 1] = num % 10 + 48;
+		num /= 10;
 	}
-	return (res + 1);
+	return (n);
 }

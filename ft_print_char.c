@@ -6,13 +6,13 @@
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 17:24:43 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/13 17:24:43 by thong-bi         ###   ########.fr       */
+/*   Updated: 2023/01/16 18:28:30 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_print_char(t_print tab, va_list args)
+int	ft_print_char(t_lst tab, va_list args)
 {
 	if (tab.dash == 1 && tab.wid > 1)
 	{

@@ -6,7 +6,7 @@
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 17:18:52 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/16 17:05:25 by thong-bi         ###   ########.fr       */
+/*   Updated: 2023/01/16 18:12:22 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*ft_convert_ptr(char *array, unsigned long long num)
 	char	*str;
 
 	len_hex = ft_strlen(array);
-	len_num = ft_num_len(num);
+	len_num = ft_num_len(num, len_hex);
 	str = (char *)malloc(sizeof(char) * (len_num + 1));
 	if (!str)
 		return (NULL);
@@ -47,7 +47,7 @@ char	*ft_convert_ptr(char *array, unsigned long long num)
 	return (str);
 }
 
-int	check_dash_ptr(t_print tab, int len, char *str)
+int	check_dash_ptr(t_lst tab, int len, char *str)
 {
 	int	count;
 
@@ -58,7 +58,7 @@ int	check_dash_ptr(t_print tab, int len, char *str)
 		count += ft_putstr_fd(str, 1);
 		count += ft_print_width(' ', tab.wid - (len + 2));
 	}
-	else if(!tab.dash)
+	else if (!tab.dash)
 	{
 		count += ft_print_width(' ', tab.wid - (len + 2));
 		count += ft_putstr_fd("0x", 1);
@@ -67,7 +67,7 @@ int	check_dash_ptr(t_print tab, int len, char *str)
 	return (count);
 }
 
-int	ft_printptr(t_print tab, va_list args)
+int	ft_printptr(t_lst tab, va_list args)
 {
 	char				*str;
 	int					len;

@@ -6,7 +6,7 @@
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 17:49:02 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/09 15:24:44 by thong-bi         ###   ########.fr       */
+/*   Updated: 2023/01/16 18:09:00 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 int	ft_first_flag(char flag)
 {
-	if (flag == '-' || (flag >= '0' && flag <= '9') || flag == '.' || flag == '*')
-		return (1);
-	return ;
+	return (flag == '-' || (flag >= '0' && flag <= '9')
+		|| flag == '.' || flag == '*');
 }
 
 int	ft_print_width(char c, int width)
@@ -25,11 +24,31 @@ int	ft_print_width(char c, int width)
 
 	i = -1;
 	while (++i < width)
-		write(1, c, 1);
+		ft_putchar_fd(c, 1);
 	return (i);
 }
 
-int	ft_print_all(char flag, t_print tab, va_list args)
+int	ft_print_other_flag(char flag, t_lst tab)
+{
+	int count;
+
+	count = 1;
+	if (tab.dash)
+	{
+		ft_putchar_fd(flag, 1);
+		if (tab.wid)
+			count += ft_print_width(' ', tab.wid - 1);
+	}
+	else if (!tab.dash)
+	{
+		if (tab.wid)
+			count += ft_print_width(' ', tab.wid - 1);
+		ft_putchar_fd(flag, 1);
+	}
+	return (count);
+}
+
+int	ft_print_all(char flag, t_lst tab, va_list args)
 {
 	int	res;
 
@@ -50,5 +69,7 @@ int	ft_print_all(char flag, t_print tab, va_list args)
 		res = ft_printhex(HEXUP, tab, args);
 	else if (flag == '%')
 		res = ft_printpercent(tab);
+	else
+		res = ft_print_other_flag(flag, tab);
 	return (res);
 }

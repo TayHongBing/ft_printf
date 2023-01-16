@@ -6,13 +6,13 @@
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 16:43:36 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/16 17:04:30 by thong-bi         ###   ########.fr       */
+/*   Updated: 2023/01/16 18:14:03 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	print_width_nbr(t_print tab, int len, int num)
+int	print_width_nbr(t_lst tab, int len, int num)
 {
 	int	count;
 
@@ -34,14 +34,14 @@ int	print_width_nbr(t_print tab, int len, int num)
 			count += ft_print_width(' ', tab.wid - tab.prec);
 	}
 	else
-		count += ft_print_width(' ', tab.wid - size);
+		count += ft_print_width(' ', tab.wid - len);
 	return (count);
 }
 
-int print_prec_nbr(t_print tab, int len, int num)
+int	print_prec_nbr(t_lst tab, int len, int num)
 {
 	int	i;
-	int count;
+	int	count;
 
 	i = 0;
 	count = 0;
@@ -60,16 +60,18 @@ int print_prec_nbr(t_print tab, int len, int num)
 		}
 		while (i++ < tab.prec - len)
 		{
-			write(1,"0", 1);
+			write(1, "0", 1);
 			count++;
 		}
 	}
 	return (count);
 }
 
-int	check_dash_nbr(t_print tab, int len, char *str, int num)
+int	check_dash_nbr(t_lst tab, int len, char *str, int num)
 {
 	int	count;
+
+	count = 0;
 	if (num < 0)
 		str++;
 	if (tab.dash)
@@ -86,7 +88,8 @@ int	check_dash_nbr(t_print tab, int len, char *str, int num)
 	}
 	return (count);
 }
-int	ft_printnbr(t_print tab, va_list args)
+
+int	ft_printnbr(t_lst tab, va_list args)
 {
 	int		num;
 	char	*str;

@@ -6,13 +6,13 @@
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 22:15:33 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/16 16:24:26 by thong-bi         ###   ########.fr       */
+/*   Updated: 2023/01/16 18:13:10 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	print_width_unsign(int len, t_print tab)
+int	print_width_unsign(int len, t_lst tab)
 {
 	int	count;
 
@@ -26,7 +26,7 @@ int	print_width_unsign(int len, t_print tab)
 	return (count);
 }
 
-int	print_prec_unsign(int len, t_print tab)
+int	print_prec_unsign(int len, t_lst tab)
 {
 	int	i;
 
@@ -40,7 +40,7 @@ int	print_prec_unsign(int len, t_print tab)
 	return (0);
 }
 
-int	check_dash_unsign(char *str, int len, t_print tab)
+int	check_dash_unsign(char *str, int len, t_lst tab)
 {
 	int	count;
 
@@ -62,38 +62,7 @@ int	check_dash_unsign(char *str, int len, t_print tab)
 	return (count);
 }
 
-int	ft_num_len(unsigned int num)
-{
-	int	len;
-
-	len = 0;
-	while (num != 0)
-	{
-		len++;
-		len /= 10;
-	}
-	return (len);
-}
-
-char	*ft_utoa(unsigned int num)
-{
-	char	*n;
-	int		len;
-
-	len = ft_num_len(num);
-	n = (char *)malloc(sizeof(char) * (len + 1));
-	if (!num)
-		return (NULL);
-	n[len] = '\0';
-	while (len-- > 0)
-	{
-		n[len - 1] = num % 10 + 48;
-		num /= 10;
-	}
-	return (n);
-}
-
-int	ft_printunsigned(t_print tab, va_list args)
+int	ft_printunsigned(t_lst tab, va_list args)
 {
 	char	*str;
 	int		len;

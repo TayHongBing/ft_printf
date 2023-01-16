@@ -6,7 +6,7 @@
 #    By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/09 15:01:58 by thong-bi          #+#    #+#              #
-#    Updated: 2023/01/09 15:03:21 by thong-bi         ###   ########.fr        #
+#    Updated: 2023/01/16 17:27:40 by thong-bi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ AR				=	ar
 ARFLAGS 		=	rcs
 RM				=	rm -rf
 
-SRC				=	ft_printf ft_printf_utils ft_printhex ft_printptr ft_printunsigned
+SRC				=	ft_printf ft_printf_utils ft_printhex ft_printptr ft_printunsigned ft_print_char ft_printnbr ft_printpercent ft_printstr
 SRCS 			=	$(addsuffix .c, $(SRC))
 
 OBJ_DIR			=	obj
