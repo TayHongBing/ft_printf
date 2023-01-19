@@ -6,7 +6,7 @@
 #    By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/09 15:01:58 by thong-bi          #+#    #+#              #
-#    Updated: 2023/01/19 16:16:01 by thong-bi         ###   ########.fr        #
+#    Updated: 2023/01/19 17:20:10 by thong-bi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,8 +32,6 @@ $(OBJ_DIR)/%.o:		%.c
 
 all:				$(NAME)
 
-bonus:				all
-
 $(NAME):			$(LIBFT) $(OBJ_DIR) $(OBJS)
 				cp	$(LIBFT) $(NAME)
 					$(AR) $(ARFLAGS) $(NAME) $(OBJS)
@@ -54,4 +52,4 @@ fclean:				clean
 
 re:					fclean all
 
-.PHONY:				all bonus clean fclean re libft
+.PHONY:				all clean fclean re libft
