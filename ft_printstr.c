@@ -5,95 +5,27 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/14 16:38:23 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/16 18:12:49 by thong-bi         ###   ########.fr       */
+/*   Created: 2023/01/19 15:37:56 by thong-bi          #+#    #+#             */
+/*   Updated: 2023/01/19 16:55:01 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	print_prec_str(char *str, int len, t_lst tab)
+int	ft_printstr(char *str)
 {
 	int	i;
 
 	i = 0;
-	if (tab.prec >= 0 && tab.prec >= len)
+	if (str == NULL)
 	{
-		while (str[i++])
-			ft_putchar_fd(str[i], 1);
+		write(1, "(null)", 6);
+		return (6);
 	}
-	else if (tab.prec >= 0 && tab.prec < len)
+	while (str[i])
 	{
-		while (i++ < tab.prec)
-			ft_putchar_fd(str[i], 1);
-	}
-	else
-	{
-		while (str[i++])
-			ft_putchar_fd(str[i], 1);
+		write(1, &str[i], 1);
+		i++;
 	}
 	return (i);
-}
-
-int	check_prec(char *str, int len, t_lst tab)
-{
-	int	i;
-
-	i = 0;
-	if (tab.prec >= 0 && tab.prec >= len)
-	{
-		while (str[i])
-			i++;
-	}
-	else if (tab.prec >= 0 && tab.prec < len)
-	{
-		while (i < tab.prec)
-			i++;
-	}
-	else
-	{
-		while (str[i])
-			i++;
-	}
-	return (i);
-}
-
-int	check_dash(char *str, int len, t_lst tab)
-{
-	int	res;
-	int	prec;
-
-	res = 0;
-	prec = check_prec(str, len, tab);
-	if (!tab.dash && tab.wid > prec)
-	{
-		if (tab.zero == 1)
-			res += ft_print_width('0', tab.wid - prec);
-		else
-			res += ft_print_width(' ', tab.wid - prec);
-		res += print_prec_str(str, len, tab);
-	}
-	else if (tab.dash && tab.wid > prec)
-	{
-		res += print_prec_str(str, len, tab);
-		res += ft_print_width(' ', tab.wid - prec);
-	}
-	else
-		res += print_prec_str(str, len, tab);
-	return (res);
-}
-
-int	ft_printstr(t_lst tab, va_list args)
-{
-	char	*str;
-	int		len;
-	int		res;
-
-	res = 0;
-	str = va_arg(args, char *);
-	if (!str)
-		str = ft_strdup("(null)");
-	len = ft_strlen(str);
-	res += check_dash(str, len, tab);
-	return (res);
 }

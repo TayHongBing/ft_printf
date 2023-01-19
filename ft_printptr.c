@@ -6,87 +6,53 @@
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 17:18:52 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/16 18:12:22 by thong-bi         ###   ########.fr       */
+/*   Updated: 2023/01/19 16:54:52 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_num_len(unsigned long long num, int len)
+int	ft_ptr_len(unsigned long num)
 {
-	int	count;
+	int	len;
 
-	count = 0;
+	len = 0;
 	while (num > 0)
 	{
-		num /= len;
-		count++;
+		len++;
+		num /= 16;
 	}
-	return (count);
+	return (len);
 }
 
-char	*ft_convert_ptr(char *array, unsigned long long num)
+void	ft_put_ptr(unsigned long num)
 {
-	int		len_hex;
-	int		len_num;
-	char	*str;
-
-	len_hex = ft_strlen(array);
-	len_num = ft_num_len(num, len_hex);
-	str = (char *)malloc(sizeof(char) * (len_num + 1));
-	if (!str)
-		return (NULL);
-	str[len_num] = '\0';
-	while (--len_num)
+	if (num >= 16)
 	{
-		str[len_num] = array[num % len_hex];
-		num /= len_hex;
-	}
-	if (len_num == 0)
-		str[len_num] = array[num % len_hex];
-	return (str);
-}
-
-int	check_dash_ptr(t_lst tab, int len, char *str)
-{
-	int	count;
-
-	count = 0;
-	if (tab.dash)
-	{
-		count += ft_putstr_fd("0x", 1);
-		count += ft_putstr_fd(str, 1);
-		count += ft_print_width(' ', tab.wid - (len + 2));
-	}
-	else if (!tab.dash)
-	{
-		count += ft_print_width(' ', tab.wid - (len + 2));
-		count += ft_putstr_fd("0x", 1);
-		count += ft_putstr_fd(str, 1);
-	}
-	return (count);
-}
-
-int	ft_printptr(t_lst tab, va_list args)
-{
-	char				*str;
-	int					len;
-	int					res;
-	unsigned long long	num;
-
-	num = va_arg(args, unsigned long long);
-	res = 0;
-	if (!num)
-	{
-		if (!tab.prec)
-			str = ft_strdup("");
-		else
-			str = ft_strdup("0");
+		ft_put_ptr(num / 16);
+		ft_put_ptr(num % 16);
 	}
 	else
-		str = ft_convert_ptr("0123456789abcdef", num);
-	len = ft_strlen(str);
-	res += check_dash_ptr(tab, len, str);
-	free(str);
+	{
+		if (num <= 9)
+			ft_putchar_fd((num + 48), 1);
+		else
+			ft_putchar_fd((num - 10 + 'a'), 1);
+	}
+}
+
+int	ft_printptr(unsigned long ptr)
+{
+	int	res;
+
+	res = 0;
+	res += write(1, "0x", 2);
+	if (ptr == 0)
+		res += write(1, "0", 1);
+	else
+	{
+		ft_put_ptr(ptr);
+		res += ft_ptr_len(ptr);
+	}
 	return (res);
 }

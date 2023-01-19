@@ -1,95 +1,58 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_printf.c                                  		:+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/20 15:10:36 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/16 18:31:33 by thong-bi         ###   ########.fr       */
+/*   Created: 2022/12/29 17:49:02 by thong-bi          #+#    #+#             */
+/*   Updated: 2023/01/19 16:10:23 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdlib.h>
 
-t_lst	ft_initialise_tab(t_lst tab)
+int	ft_formats(va_list args, const char format)
 {
-	tab.wid = 0;
-	tab.prec = -1;
-	tab.zero = 0;
-	tab.pnt = 0;
-	tab.dash = 0;
-	return (tab);
-}
+	int	res;
 
-t_lst	ft_check_wild(t_lst tab, va_list args)
-{
-	if (tab.pnt == 1)
-		tab.prec = va_arg(args, int);
-	else if (tab.wid < 1)
-	{
-		tab.wid = va_arg(args, int);
-		if (tab.wid < 0)
-		{
-			tab.wid *= (-1);
-			tab.dash = 1;
-		}
-	}
-	return (tab);
-}
-
-t_lst	ft_first_check(const char *format, t_lst tab, va_list args)
-{
-	int	i;
-
-	i = 0;
-	while (format[i] && ft_first_flag(format[i]))
-	{
-		if (format[i] == '-')
-			tab.dash = 1;
-		else if (format[i] == '0' && tab.wid < 1 && tab.pnt == 0)
-			tab.zero = 1;
-		else if ((format[i] >= '0' && format[i] <= '9') && tab.pnt == 0)
-			tab.wid = tab.wid * 10 + format[i] - 48;
-		else if (format[i] == '.')
-		{
-			tab.pnt = 1;
-			tab.prec = 0;
-		}
-		else if ((format[i] >= '0' && format[i] <= '9') && tab.pnt == 1)
-			tab.prec = tab.prec * 10 + format[i] - 48;
-		else if (format[i] == '*')
-			tab = ft_check_wild(tab, args);
-		i++;
-	}
-	return (tab);
+	res = 0;
+	if (format == 'c')
+		res += ft_print_char(va_arg(args, int));
+	else if (format == 's')
+		res += ft_printstr(va_arg(args, char *));
+	else if (format == 'p')
+		res += ft_printptr(va_arg(args, unsigned long long));
+	else if (format == 'd' || format == 'i')
+		res += ft_printnbr(va_arg(args, int));
+	else if (format == 'u')
+		res += ft_printunsigned(va_arg(args, unsigned int));
+	else if (format == 'x' || format == 'X')
+		res += ft_printhex(va_arg(args, unsigned int), format);
+	else if (format == '%')
+		res += ft_printpercent();
+	return (res);
 }
 
 int	ft_printf(const char *format, ...)
 {
-	t_lst	tab;
-	va_list	args;
 	int		i;
+	va_list	args;
 	int		res;
 
-	va_start(args, format);
 	i = 0;
 	res = 0;
-	while (format[i] != '\0')
+	va_start(args, format);
+	while (format[i])
 	{
-		res += (format[i] == '%') ? 0 : 1;
-		if (format[i] == '%' && format[i + 1] != '\0')
+		if (format[i] == '%')
 		{
-			tab = ft_initialise_tab(tab);
-			tab = ft_first_check(&format[++i], tab, args);
-			while (ft_first_flag(format[i]))
-				i++;
-			res += ft_print_all(format[i], tab, args);
+			res += ft_formats(args, format[i + 1]);
+			i++;
 		}
 		else
-			ft_putchar_fd(format[i], 1);
-		i += (format[i] == '\0') ? 0 : 1;
+			res += ft_print_char(format[i]);
+		i++;
 	}
 	va_end(args);
 	return (res);

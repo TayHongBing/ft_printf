@@ -6,7 +6,7 @@
 /*   By: thong-bi <thong-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 17:41:40 by thong-bi          #+#    #+#             */
-/*   Updated: 2023/01/16 17:42:01 by thong-bi         ###   ########.fr       */
+/*   Updated: 2023/01/19 16:52:12 by thong-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	num_len(unsigned int num)
 	while (num != 0)
 	{
 		len++;
-		len /= 10;
+		num /= 10;
 	}
 	return (len);
 }
@@ -35,10 +35,11 @@ char	*ft_utoa(unsigned int num)
 	if (!num)
 		return (NULL);
 	n[len] = '\0';
-	while (len-- > 0)
+	while (num != 0)
 	{
 		n[len - 1] = num % 10 + 48;
 		num /= 10;
+		len--;
 	}
 	return (n);
 }
